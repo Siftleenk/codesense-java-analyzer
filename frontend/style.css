@@ -1,0 +1,460 @@
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0f172a,
+            #111827,
+            #1e293b
+        );
+
+    color: #f8fafc;
+
+    min-height: 100vh;
+}
+
+
+.navbar {
+    width: 100%;
+
+    padding: 22px 7%;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    border-bottom: 1px solid #334155;
+}
+
+
+.logo {
+    font-size: 28px;
+
+    font-weight: 700;
+
+    letter-spacing: -1px;
+}
+
+
+.logo span {
+    color: #38bdf8;
+}
+
+
+.tagline {
+    color: #94a3b8;
+
+    font-size: 14px;
+}
+
+
+.container {
+    width: 86%;
+
+    max-width: 1100px;
+
+    margin: 0 auto;
+
+    padding: 55px 0;
+}
+
+
+.hero {
+    text-align: center;
+
+    margin-bottom: 40px;
+}
+
+
+.hero h1 {
+    font-size: 42px;
+
+    margin-bottom: 14px;
+}
+
+
+.hero p {
+    color: #94a3b8;
+
+    font-size: 17px;
+
+    max-width: 650px;
+
+    margin: auto;
+
+    line-height: 1.6;
+}
+
+
+.editor-section {
+    background: #111827;
+
+    border: 1px solid #334155;
+
+    border-radius: 16px;
+
+    padding: 22px;
+
+    box-shadow:
+        0 15px 40px rgba(
+            0,
+            0,
+            0,
+            0.25
+        );
+}
+
+
+.section-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 18px;
+}
+
+
+.section-header h2 {
+    font-size: 20px;
+}
+
+
+button {
+    background: #38bdf8;
+
+    color: #082f49;
+
+    border: none;
+
+    padding: 12px 22px;
+
+    border-radius: 8px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+button:hover {
+    transform: translateY(-2px);
+
+    opacity: 0.9;
+}
+
+
+button:disabled {
+    opacity: 0.6;
+
+    cursor: not-allowed;
+
+    transform: none;
+}
+
+
+textarea {
+    width: 100%;
+
+    min-height: 360px;
+
+    resize: vertical;
+
+    background: #020617;
+
+    color: #e2e8f0;
+
+    border: 1px solid #334155;
+
+    border-radius: 10px;
+
+    padding: 20px;
+
+    font-family:
+        "SFMono-Regular",
+        Consolas,
+        monospace;
+
+    font-size: 14px;
+
+    line-height: 1.7;
+
+    outline: none;
+}
+
+
+textarea:focus {
+    border-color: #38bdf8;
+}
+
+
+.results {
+    margin-top: 35px;
+}
+
+
+.hidden {
+    display: none;
+}
+
+
+.score-card {
+    background: #111827;
+
+    border: 1px solid #334155;
+
+    border-radius: 16px;
+
+    padding: 28px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 25px;
+}
+
+
+.score-circle {
+    width: 120px;
+
+    height: 120px;
+
+    border: 7px solid #38bdf8;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    flex-direction: column;
+
+    flex-shrink: 0;
+}
+
+
+.score-circle span {
+    font-size: 32px;
+
+    font-weight: 700;
+}
+
+
+.score-circle small {
+    color: #94a3b8;
+}
+
+
+.score-card h2 {
+    margin-bottom: 8px;
+}
+
+
+.score-card p {
+    color: #94a3b8;
+
+    line-height: 1.5;
+}
+
+
+.metrics {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 18px;
+
+    margin-top: 20px;
+}
+
+
+.metric-card {
+    background: #111827;
+
+    border: 1px solid #334155;
+
+    border-radius: 12px;
+
+    padding: 22px;
+
+    text-align: center;
+}
+
+
+.metric-label {
+    display: block;
+
+    color: #94a3b8;
+
+    margin-bottom: 8px;
+}
+
+
+.metric-card strong {
+    font-size: 30px;
+}
+
+
+.issues-section {
+    margin-top: 25px;
+}
+
+
+.issues-section h2 {
+    margin-bottom: 15px;
+}
+
+
+.issue-card {
+    background: #111827;
+
+    border: 1px solid #334155;
+
+    border-left: 5px solid #f59e0b;
+
+    border-radius: 10px;
+
+    padding: 20px;
+
+    margin-bottom: 12px;
+}
+
+
+.issue-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-bottom: 10px;
+}
+
+
+.issue-type {
+    font-weight: 700;
+}
+
+
+.issue-severity {
+    color: #fbbf24;
+
+    font-size: 13px;
+
+    font-weight: 700;
+}
+
+
+.issue-message {
+    color: #cbd5e1;
+
+    margin-bottom: 8px;
+
+    line-height: 1.5;
+}
+
+
+.issue-suggestion {
+    color: #94a3b8;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+}
+
+
+.no-issues {
+    background: #111827;
+
+    border: 1px solid #334155;
+
+    border-radius: 10px;
+
+    padding: 25px;
+
+    color: #94a3b8;
+
+    text-align: center;
+}
+
+
+.error {
+    background: #450a0a;
+
+    border: 1px solid #991b1b;
+
+    color: #fecaca;
+
+    padding: 18px;
+
+    border-radius: 10px;
+
+    margin-top: 20px;
+}
+
+
+footer {
+    text-align: center;
+
+    padding: 35px;
+
+    color: #64748b;
+
+    font-size: 13px;
+
+    line-height: 1.8;
+}
+
+
+@media (max-width: 700px) {
+
+    .navbar {
+        flex-direction: column;
+
+        gap: 8px;
+    }
+
+
+    .hero h1 {
+        font-size: 32px;
+    }
+
+
+    .section-header {
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 15px;
+    }
+
+
+    .metrics {
+        grid-template-columns: 1fr;
+    }
+
+
+    .score-card {
+        flex-direction: column;
+
+        text-align: center;
+    }
+
+}
+

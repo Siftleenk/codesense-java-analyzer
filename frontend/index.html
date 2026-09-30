@@ -1,0 +1,201 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>CodeSense — Java Code Analyzer</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+</head>
+
+<body>
+
+    <header class="navbar">
+
+        <div class="logo">
+            Code<span>Sense</span>
+        </div>
+
+        <div class="tagline">
+            Java Code Quality Analyzer
+        </div>
+
+    </header>
+
+
+    <main class="container">
+
+        <section class="hero">
+
+            <h1>
+                Analyze Your Java Code
+            </h1>
+
+            <p>
+                Detect code smells, measure code quality,
+                and get actionable improvement suggestions.
+            </p>
+
+        </section>
+
+
+        <section class="editor-section">
+
+            <div class="section-header">
+
+                <h2>
+                    Java Source Code
+                </h2>
+
+                <button
+                    id="analyzeButton"
+                    onclick="analyzeCode()"
+                >
+                    Analyze Code
+                </button>
+
+            </div>
+
+
+            <textarea
+                id="codeInput"
+                placeholder="Paste your Java code here..."
+                spellcheck="false"
+            >public class Student {
+
+    public void display() {
+        System.out.println("Hello CodeSense");
+    }
+
+}</textarea>
+
+        </section>
+
+
+        <section
+            id="results"
+            class="results hidden"
+        >
+
+            <div class="score-card">
+
+                <div class="score-circle">
+
+                    <span id="score">
+                        --
+                    </span>
+
+                    <small>
+                        / 100
+                    </small>
+
+                </div>
+
+                <div>
+
+                    <h2>
+                        Code Quality
+                    </h2>
+
+                    <p id="scoreMessage">
+                        Analyze your code to see the result.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="metrics">
+
+                <div class="metric-card">
+
+                    <span class="metric-label">
+                        Lines
+                    </span>
+
+                    <strong id="totalLines">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="metric-card">
+
+                    <span class="metric-label">
+                        Classes
+                    </span>
+
+                    <strong id="classes">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="metric-card">
+
+                    <span class="metric-label">
+                        Methods
+                    </span>
+
+                    <strong id="methods">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="issues-section">
+
+                <h2>
+                    Code Smells & Issues
+                </h2>
+
+                <div id="issuesContainer">
+
+                    <div class="no-issues">
+                        No issues detected.
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+
+        <p>
+            CodeSense — Java Code Quality Analyzer
+        </p>
+
+        <p>
+            Built with Python, FastAPI & JavaScript
+        </p>
+
+    </footer>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
+```
