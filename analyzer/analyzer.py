@@ -14,6 +14,10 @@ def count_classes(code):
 def find_methods(code):
     """
     Find basic Java methods and calculate their line counts.
+
+    Handles both:
+    1. Multi-line methods
+    2. Single-line methods
     """
 
     lines = code.splitlines()
@@ -25,32 +29,49 @@ def find_methods(code):
     method_start = 0
     brace_count = 0
 
-    method_pattern = (
-        r"(public|private|protected|static|\s)+"
-        r"[\w<>\[\]]+\s+\w+\s*\([^;{}]*\)\s*\{"
+    method_pattern = re.compile(
+        r"\b(?:public|private|protected|static|final|"
+        r"synchronized|abstract|native|default)?\s*"
+        r"(?:<[^>]+>\s*)?"
+        r"[\w<>\[\], ?]+\s+"
+        r"\w+\s*"
+        r"\([^;{}]*\)\s*\{"
     )
 
     for index, line in enumerate(lines, start=1):
 
         stripped = line.strip()
 
-        if not inside_method and re.search(method_pattern, stripped):
-
-            inside_method = True
-            current_method = stripped
-            method_start = index
-
-            brace_count = (
-                stripped.count("{")
-                - stripped.count("}")
-            )
-
+        if not stripped:
             continue
 
-        if inside_method:
+        # Look for a method declaration
+        match = method_pattern.search(stripped)
 
-            brace_count += line.count("{")
-            brace_count -= line.count("}")
+        if not inside_method and match:
+
+            inside_method = True
+            current_method = match.group(0).strip()
+            method_start = index
+
+            # IMPORTANT:
+            # Count ALL braces on the same line.
+            brace_count = (
+                line.count("{")
+                - line.count("}")
+            )
+
+            # Handles one-line methods such as:
+            #
+            # public void display() {
+            #     System.out.println("Hello");
+            # }
+            #
+            # and:
+            #
+            # public void display() {
+            #     System.out.println("Hello");
+            # }
 
             if brace_count == 0:
 
@@ -65,6 +86,29 @@ def find_methods(code):
 
                 inside_method = False
                 current_method = None
+                brace_count = 0
+
+            continue
+
+        if inside_method:
+
+            brace_count += line.count("{")
+            brace_count -= line.count("}")
+
+            if brace_count <= 0:
+
+                method_length = index - method_start + 1
+
+                methods.append({
+                    "name": current_method,
+                    "start_line": method_start,
+                    "end_line": index,
+                    "lines": method_length
+                })
+
+                inside_method = False
+                current_method = None
+                brace_count = 0
 
     return methods
 
@@ -165,7 +209,6 @@ def calculate_quality_score(issues):
         issue_type = issue["type"]
 
         if issue_type in penalties:
-
             score -= penalties[issue_type]
 
     return max(score, 0)
@@ -334,3 +377,4 @@ public class Student {
             indent=4
         )
     )
+
