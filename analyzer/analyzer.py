@@ -24,15 +24,14 @@ def find_methods(code):
     method_start = 0
     brace_count = 0
 
+    method_pattern = (
+        r"(public|private|protected|static|\s)+"
+        r"[\w<>\[\]]+\s+\w+\s*\([^;{}]*\)\s*\{"
+    )
+
     for index, line in enumerate(lines, start=1):
 
         stripped = line.strip()
-
-        # Detect a basic Java method declaration
-        method_pattern = (
-            r"(public|private|protected|static|\s)+"
-            r"[\w<>\[\]]+\s+\w+\s*\([^;{}]*\)\s*\{"
-        )
 
         if not inside_method and re.search(method_pattern, stripped):
 
@@ -94,6 +93,52 @@ def detect_long_methods(methods, threshold=20):
     return issues
 
 
+def detect_deep_nesting(code, threshold=3):
+    """
+    Detect excessive nesting of code blocks.
+    """
+
+    lines = code.splitlines()
+
+    current_depth = 0
+    maximum_depth = 0
+
+    for line in lines:
+
+        stripped = line.strip()
+
+        if not stripped or stripped.startswith("//"):
+            continue
+
+        opening_braces = line.count("{")
+        closing_braces = line.count("}")
+
+        current_depth += opening_braces
+
+        maximum_depth = max(maximum_depth, current_depth)
+
+        current_depth -= closing_braces
+
+    issues = []
+
+    if maximum_depth > threshold:
+
+        issues.append({
+            "type": "Deep Nesting",
+            "severity": "Medium",
+            "depth": maximum_depth,
+            "message": (
+                f"Maximum nesting depth is {maximum_depth}."
+            ),
+            "suggestion": (
+                "Consider reducing nested control structures "
+                "or extracting logic into separate methods."
+            )
+        })
+
+    return issues
+
+
 def analyze_java_code(code):
 
     lines = code.splitlines()
@@ -101,7 +146,8 @@ def analyze_java_code(code):
     total_lines = len(lines)
 
     non_empty_lines = [
-        line for line in lines
+        line
+        for line in lines
         if line.strip()
     ]
 
@@ -111,12 +157,14 @@ def analyze_java_code(code):
 
     long_methods = detect_long_methods(methods)
 
+    deep_nesting = detect_deep_nesting(code)
+
     return {
         "total_lines": total_lines,
         "non_empty_lines": len(non_empty_lines),
         "classes": classes,
         "methods": methods,
-        "issues": long_methods
+        "issues": long_methods + deep_nesting
     }
 
 
@@ -127,29 +175,21 @@ public class Student {
 
     public void processStudent() {
 
-        int a = 1;
-        int b = 2;
-        int c = 3;
-        int d = 4;
-        int e = 5;
-        int f = 6;
-        int g = 7;
-        int h = 8;
-        int i = 9;
-        int j = 10;
-        int k = 11;
-        int l = 12;
-        int m = 13;
-        int n = 14;
-        int o = 15;
-        int p = 16;
-        int q = 17;
-        int r = 18;
-        int s = 19;
-        int t = 20;
+        if (condition1) {
 
+            if (condition2) {
+
+                for (int i = 0; i < 10; i++) {
+
+                    if (condition3) {
+
+                        System.out.println("Deep nesting");
+
+                    }
+                }
+            }
+        }
     }
-
 }
 """
 
@@ -173,9 +213,14 @@ public class Student {
 
         for issue in result["issues"]:
 
-            print("Type:", issue["type"])
+            print("\nType:", issue["type"])
             print("Severity:", issue["severity"])
-            print("Lines:", issue["lines"])
+
+            if "lines" in issue:
+                print("Lines:", issue["lines"])
+
+            if "depth" in issue:
+                print("Depth:", issue["depth"])
+
             print("Message:", issue["message"])
             print("Suggestion:", issue["suggestion"])
-
