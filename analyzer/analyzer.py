@@ -138,6 +138,27 @@ def detect_deep_nesting(code, threshold=3):
 
     return issues
 
+def calculate_quality_score(issues):
+    """
+    Calculate a simple code-quality score from 0 to 100.
+    """
+
+    score = 100
+
+    penalties = {
+        "Long Method": 10,
+        "Deep Nesting": 10
+    }
+
+    for issue in issues:
+
+        issue_type = issue["type"]
+
+        if issue_type in penalties:
+            score -= penalties[issue_type]
+
+    return max(score, 0)
+
 
 def analyze_java_code(code):
 
@@ -159,12 +180,18 @@ def analyze_java_code(code):
 
     deep_nesting = detect_deep_nesting(code)
 
+    issues = long_methods + deep_nesting
+
+    quality_score = calculate_quality_score(issues)
+
     return {
         "total_lines": total_lines,
         "non_empty_lines": len(non_empty_lines),
         "classes": classes,
         "methods": methods,
-        "issues": long_methods + deep_nesting
+        "issues": long_methods + deep_nesting,
+        "quality_score": quality_score
+
     }
 
 
@@ -202,6 +229,7 @@ public class Student {
     print("Non-empty Lines:", result["non_empty_lines"])
     print("Classes:", result["classes"])
     print("Methods:", len(result["methods"]))
+    print("Quality Score:", result["quality_score"], "/ 100")
 
     print("\nISSUES")
 
