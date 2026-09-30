@@ -1,5 +1,6 @@
 
 import re
+import json
 
 
 def count_classes(code):
@@ -38,7 +39,11 @@ def find_methods(code):
             inside_method = True
             current_method = stripped
             method_start = index
-            brace_count = stripped.count("{") - stripped.count("}")
+
+            brace_count = (
+                stripped.count("{")
+                - stripped.count("}")
+            )
 
             continue
 
@@ -115,7 +120,10 @@ def detect_deep_nesting(code, threshold=3):
 
         current_depth += opening_braces
 
-        maximum_depth = max(maximum_depth, current_depth)
+        maximum_depth = max(
+            maximum_depth,
+            current_depth
+        )
 
         current_depth -= closing_braces
 
@@ -128,7 +136,8 @@ def detect_deep_nesting(code, threshold=3):
             "severity": "Medium",
             "depth": maximum_depth,
             "message": (
-                f"Maximum nesting depth is {maximum_depth}."
+                f"Maximum nesting depth is "
+                f"{maximum_depth}."
             ),
             "suggestion": (
                 "Consider reducing nested control structures "
@@ -138,9 +147,10 @@ def detect_deep_nesting(code, threshold=3):
 
     return issues
 
+
 def calculate_quality_score(issues):
     """
-    Calculate a simple code-quality score from 0 to 100.
+    Calculate a code-quality score from 0 to 100.
     """
 
     score = 100
@@ -155,12 +165,16 @@ def calculate_quality_score(issues):
         issue_type = issue["type"]
 
         if issue_type in penalties:
+
             score -= penalties[issue_type]
 
     return max(score, 0)
 
 
 def analyze_java_code(code):
+    """
+    Perform complete CodeSense analysis.
+    """
 
     lines = code.splitlines()
 
@@ -189,10 +203,32 @@ def analyze_java_code(code):
         "non_empty_lines": len(non_empty_lines),
         "classes": classes,
         "methods": methods,
-        "issues": long_methods + deep_nesting,
+        "issues": issues,
         "quality_score": quality_score
-
     }
+
+
+def generate_report(code):
+    """
+    Generate a structured CodeSense JSON-compatible report.
+    """
+
+    result = analyze_java_code(code)
+
+    report = {
+        "quality_score": result["quality_score"],
+
+        "metrics": {
+            "total_lines": result["total_lines"],
+            "non_empty_lines": result["non_empty_lines"],
+            "classes": result["classes"],
+            "methods": len(result["methods"])
+        },
+
+        "issues": result["issues"]
+    }
+
+    return report
 
 
 if __name__ == "__main__":
@@ -225,11 +261,31 @@ public class Student {
     print("CODE SENSE ANALYSIS")
     print("-------------------")
 
-    print("Total Lines:", result["total_lines"])
-    print("Non-empty Lines:", result["non_empty_lines"])
-    print("Classes:", result["classes"])
-    print("Methods:", len(result["methods"]))
-    print("Quality Score:", result["quality_score"], "/ 100")
+    print(
+        "Total Lines:",
+        result["total_lines"]
+    )
+
+    print(
+        "Non-empty Lines:",
+        result["non_empty_lines"]
+    )
+
+    print(
+        "Classes:",
+        result["classes"]
+    )
+
+    print(
+        "Methods:",
+        len(result["methods"])
+    )
+
+    print(
+        "Quality Score:",
+        result["quality_score"],
+        "/ 100"
+    )
 
     print("\nISSUES")
 
@@ -242,13 +298,39 @@ public class Student {
         for issue in result["issues"]:
 
             print("\nType:", issue["type"])
-            print("Severity:", issue["severity"])
+
+            print(
+                "Severity:",
+                issue["severity"]
+            )
 
             if "lines" in issue:
-                print("Lines:", issue["lines"])
+                print(
+                    "Lines:",
+                    issue["lines"]
+                )
 
             if "depth" in issue:
-                print("Depth:", issue["depth"])
+                print(
+                    "Depth:",
+                    issue["depth"]
+                )
 
-            print("Message:", issue["message"])
-            print("Suggestion:", issue["suggestion"])
+            print(
+                "Message:",
+                issue["message"]
+            )
+
+            print(
+                "Suggestion:",
+                issue["suggestion"]
+            )
+
+    print("\nJSON REPORT")
+
+    print(
+        json.dumps(
+            generate_report(sample_code),
+            indent=4
+        )
+    )
