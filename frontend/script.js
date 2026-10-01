@@ -1,5 +1,5 @@
 
-const API_URL = "http://127.0.0.1:8000/analyze";
+const API_URL = "https://codesense-java-analyzer.onrender.com/analyze"
 
 
 async function analyzeCode() {
